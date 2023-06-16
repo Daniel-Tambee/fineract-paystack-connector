@@ -1,0 +1,57 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: fineract-paystack-connector
+
+  datasource:
+    url: ${DB_URL:jdbc:h2:mem:paystackconnector;DB_CLOSE_DELAY=-1}
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:}
+    driver-class-name: ${DB_DRIVER:org.h2.Driver}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# --- Paystack ---
+paystack:
+  secret-key: ${PAYSTACK_SECRET_KEY:}
+  public-key: ${PAYSTACK_PUBLIC_KEY:}
+  base-url: ${PAYSTACK_BASE_URL:https://api.paystack.co}
+  default-callback-url: ${PAYSTACK_CALLBACK_URL:}
+
+# --- Fineract ---
+fineract:
+  base-url: ${FINERACT_BASE_URL:https://localhost/fineract-provider/api/v1}
+  username: ${FINERACT_USERNAME:mifos}
+  password: ${FINERACT_PASSWORD:password}
+  tenant-id: ${FINERACT_TENANT_ID:default}
+  trust-self-signed: ${FINERACT_TRUST_SELF_SIGNED:true}
+  paystack-payment-type-id: ${FINERACT_PAYSTACK_PAYMENT_TYPE_ID:}
+  locale: en
+  date-format: "dd MMMM yyyy"
+
+# --- Connector-level auth for /api/v1/payments/** ---
+connector:
+  api-key: ${CONNECTOR_API_KEY:}
+
+logging:
+  level:
+    com.paystackfineract.connector: INFO
